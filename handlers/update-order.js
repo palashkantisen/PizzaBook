@@ -11,7 +11,7 @@ function updateOrder(orderId, options) {
       Key: {
         orderId: orderId
       },
-      UpdateExpression: 'set pizza = :p, addresss = :a', 
+      UpdateExpression: 'set pizza = :p, address = :a', 
       ExpressionAttributeValues: {
         ':p': options.pizza, 
         ':a': options.address
