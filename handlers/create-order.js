@@ -5,7 +5,7 @@ const docClient = new AWS.DynamoDB.DocumentClient()
 const rp = require('minimal-request-promise')
 
 function createOrder(request) {  
-    if (!request || !request.pizza || !request.address)  
+    if (!request.body || !request.body.pizza || !request.body.address)  
       throw new Error('To order pizza please provide pizza type and address where pizza should be delivered')
   return rp.post('https://some-like-it-hot.effortless-serverless.com/delivery', {
     headers: {
@@ -15,7 +15,7 @@ function createOrder(request) {
     body: JSON.stringify({  
       pickupTime: '15.34pm',
       pickupAddress: 'Aunt Maria Pizzeria',
-      deliveryAddress: request.address,  
+      deliveryAddress: request.body.address,  
       webhookUrl: 'https://mgwepzjxg8.execute-api.ap-southeast-2.amazonaws.com/latest/delivery',  
     })
   })
@@ -25,8 +25,8 @@ function createOrder(request) {
       TableName: 'pizza-orders', 
       Item: {
         orderId: Response.deliveryId, 
-        pizza: request.pizza,
-        address: request.address, 
+        pizza: request.body.pizza,
+        address: request.body.address, 
         orderStatus: 'pending'
       }
     }).promise()
